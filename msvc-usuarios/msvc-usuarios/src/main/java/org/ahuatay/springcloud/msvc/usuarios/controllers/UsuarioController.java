@@ -39,7 +39,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.guardar(usuario));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping ("/{id}")
     public ResponseEntity<?> editar(@RequestBody Usuario usuario, @PathVariable Long id) {
         Optional<Usuario> op = service.porId(id);
         if (op.isPresent()) {
