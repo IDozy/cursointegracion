@@ -47,7 +47,7 @@ public class UsuarioController {
             usuarioDB.setName(usuario.getName());
             usuarioDB.setEmail(usuario.getEmail());
             usuarioDB.setPassword(usuario.getPassword());
-            return ResponseEntity.status(HttpStatus.CREATED).body(service.guardar(usuario));
+            return ResponseEntity.status(HttpStatus.CREATED).body(service.guardar(usuarioDB));
         }else{
             return ResponseEntity.notFound().build();
         }
