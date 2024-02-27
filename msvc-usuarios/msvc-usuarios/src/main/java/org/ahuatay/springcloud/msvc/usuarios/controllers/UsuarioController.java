@@ -6,10 +6,10 @@ import org.ahuatay.springcloud.msvc.usuarios.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequestMapping("/api/usuario")
 @RestController
@@ -35,12 +35,26 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> crear(@RequestBody Usuario usuario, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(err -> {
+                errores.put(err.getField(), "El campo" + err.getField() + " " + err.getDefaultMessage());
+            });
+            return ResponseEntity.badRequest().body(errores);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(service.guardar(usuario));
     }
 
-    @PutMapping ("/{id}")
-    public ResponseEntity<?> editar(@RequestBody Usuario usuario, @PathVariable Long id) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar(@RequestBody Usuario usuario, BindingResult result, @PathVariable Long id ) {
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(err -> {
+                errores.put(err.getField(), "El campo" + err.getField() + " " + err.getDefaultMessage());
+            });
+            return ResponseEntity.badRequest().body(errores);
+        }
         Optional<Usuario> op = service.porId(id);
         if (op.isPresent()) {
             Usuario usuarioDB = op.get();
@@ -48,19 +62,19 @@ public class UsuarioController {
             usuarioDB.setEmail(usuario.getEmail());
             usuarioDB.setPassword(usuario.getPassword());
             return ResponseEntity.status(HttpStatus.CREATED).body(service.guardar(usuarioDB));
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
 
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id){
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
         Optional<Usuario> op = service.porId(id);
         if (op.isPresent()) {
             service.eliminar(id);
             return ResponseEntity.noContent().build();
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
