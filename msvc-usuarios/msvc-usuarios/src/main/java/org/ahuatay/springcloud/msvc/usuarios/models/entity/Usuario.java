@@ -1,6 +1,8 @@
 package org.ahuatay.springcloud.msvc.usuarios.models.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
 
 
 @Entity
@@ -10,10 +12,14 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @NotEmpty //detecta que no exista
     private String name;
 
+    @NotBlank // valida que no haya nada y que no haya espacios
+    @Email //valida el formato de correo
     @Column(unique = true)
     private String email;
+    @NotBlank
     private String password;
 
 
