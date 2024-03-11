@@ -87,6 +87,21 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/usuario-por-curso")
+    public ResponseEntity<List<Usuario>>  listarAlumnosporCurso(@RequestParam List<Long> ids){
+        return  ResponseEntity.ok(service.listarPorIds(ids));
+    }
 
 
+  /*  @DeleteMapping("deletecurso/{id}")
+    public ResponseEntity<?> Desasignare(@PathVariable Long id) {
+        Optional<Usuario> op = service.porId(id);
+        if (op.isPresent()) {
+            service.eliminarCurso(id);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+*/
 }
